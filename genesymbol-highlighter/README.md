@@ -29,7 +29,8 @@ A professional browser extension for real-time gene symbol identification and re
 - `styles.css`: Tooltip and highlight styles.
 - `options.html/js`: Settings dashboard.
 - `icon.svg` & `icon*.png`: Extension assets.
-- `privacy.html`: Extension privacy policy.
+- `privacy.html`: [Live Privacy Policy](https://raw.githubusercontent.com/pkheisig/genesymbol-highlighter/main/genesymbol-highlighter/privacy.html)
 
-## Publishing
-The root directory contains `genesymbol-highlighter.zip`, which is ready for upload to the Chrome Web Store Developer Dashboard.
+## Chrome Web Store Submission
+When publishing, use the justifications provided in the documentation for host permissions and storage. Ensure the Privacy Policy URL is set to the raw GitHub link provided above.
+
