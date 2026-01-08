@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "GeneSymbol Highlighter",
+  "version": "1.1.0",
+  "description": "Professional tool for gene symbol identification and reference.",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": ["storage", "contextMenus"],
+  "host_permissions": ["https://rest.uniprot.org/*", "https://eutils.ncbi.nlm.nih.gov/*"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.nature.com/*",
+        "https://*.science.org/*",
+        "https://*.pnas.org/*",
+        "https://*.plos.org/*",
+        "https://*.cell.com/*",
+        "https://*.biorxiv.org/*",
+        "https://*.medrxiv.org/*",
+        "https://*.pubmed.ncbi.nlm.nih.gov/*",
+        "https://*.ncbi.nlm.nih.gov/*",
+        "https://*.uniprot.org/*",
+        "https://*.europepmc.org/*",
+        "https://*.nih.gov/*",
+        "https://*.thelancet.com/*",
+        "https://*.nejm.org/*",
+        "https://*.bmj.com/*",
+        "https://*.sciencedirect.com/*",
+        "https://*.wiley.com/*",
+        "https://*.springer.com/*",
+        "https://*.frontiersin.org/*",
+        "https://*.mdpi.com/*",
+        "https://*.embo.org/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-highlights": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+H",
+        "mac": "Command+Shift+H"
+      },
+      "description": "Toggle GeneSymbol Highlighter highlights on/off"
+    }
+  }
+}

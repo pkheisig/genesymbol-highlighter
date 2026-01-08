@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GeneSymbol Highlighter Options</title>
+  <link rel="icon" type="image/png" href="icon16.png">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f9fafb;
+      --card-bg: #ffffff;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card-bg: #1f2937;
+        --text-main: #f9fafb;
+        --text-muted: #9ca3af;
+        --border: #374151;
+      }
+      select, textarea { background-color: #374151; color: #f9fafb; }
+      .color-container { background: #374151; }
+      .card { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+      #reset-defaults { color: #6b7280; }
+    }
+
+    body { 
+      font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+      background-color: var(--bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    h1 { font-size: 24px; font-weight: 800; margin: 0; color: var(--primary); letter-spacing: -0.025em; }
+    p { color: var(--text-muted); font-size: 14px; margin-top: 8px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    label { 
+      display: block; 
+      font-size: 14px; 
+      font-weight: 600; 
+      margin-bottom: 8px; 
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: #fff;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    select:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .row { display: flex; align-items: center; gap: 16px; }
+    .col { flex: 1; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .color-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f3f4f6;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    input[type="color"] {
+      border: none;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      background: none;
+      padding: 0;
+    }
+
+    #preview-swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px var(--border);
+      background-image: 
+        linear-gradient(45deg, #e5e7eb 25%, transparent 25%), 
+        linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e5e7eb 75%), 
+        linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
+      background-size: 10px 10px;
+      background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+      overflow: hidden;
+    }
+
+    #preview-inner { width: 100%; height: 100%; }
+
+    textarea { height: 100px; font-family: monospace; line-height: 1.5; }
+    .hint { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>GeneSymbol Highlighter</h1>
+      <p>Identify and explore genes within your browser</p>
+    </header>
+
+    <div class="card">
+      <div class="section-title"><span>🧬</span> Primary Settings</div>
+      <div class="form-group">
+        <label>Target Organism</label>
+        <div class="row">
+          <div class="col">
+            <select id="organism">
+              <option value="9606">Human (Homo sapiens)</option>
+              <option value="10090">Mouse (Mus musculus)</option>
+              <option value="10116">Rat (Rattus norvegicus)</option>
+            </select>
+          </div>
+          <button id="refresh-cache" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;">Refresh Database</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span>🎨</span> Appearance & Trigger</div>
+      
+      <div class="row" style="margin-bottom: 24px;">
+        <div class="col">
+          <label>Trigger</label>
+          <select id="triggerMode">
+            <option value="hover">Hover</option>
+            <option value="click">Click</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Style</label>
+          <select id="visualStyle">
+            <option value="bg">Highlight</option>
+            <option value="underline">Underline</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Highlight Color & Strength</label>
+        <div class="color-container">
+          <div id="preview-swatch"><div id="preview-inner"></div></div>
+          <input type="color" id="highlightColor">
+          <input type="range" id="highlightOpacity" min="0.1" max="1" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span>🔍</span> Recognition & Detail</div>
+      
+      <div class="row">
+        <div class="col">
+          <label>Frequency</label>
+          <select id="highlightMode">
+            <option value="all">Everywhere</option>
+            <option value="first">First Only</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Case Matching</label>
+          <select id="caseMode">
+            <option value="smart">Starts with Uppercase</option>
+            <option value="strict">Strict Uppercase</option>
+            <option value="permissive">Any Case</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 20px;">
+        <label>Information Detail</label>
+        <select id="detailLevel">
+          <option value="full">Full Summary</option>
+          <option value="compact">Compact (IDs Only)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span>⚙️</span> Advanced</div>
+      <div class="form-group">
+        <label>NCBI API Key (Optional)</label>
+        <input type="password" id="ncbiKey" placeholder="Enter your NCBI API Key">
+        <p class="hint">Increases rate limits for data fetching. Get one at <a href="https://www.ncbi.nlm.nih.gov/account/settings/" target="_blank">NCBI Account Settings</a>.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span>🌐</span> Whitelisted Domains</div>
+      <textarea id="whitelist" placeholder="e.g. nature.com, science.org"></textarea>
+      <p class="hint">Comma-separated domains. Active on all subpages. Leave empty to enable on all websites.</p>
+    </div>
+
+    <div class="card" style="border-style: dashed; background: #fafafa;">
+      <div class="section-title"><span>🧪</span> Test Your Style</div>
+      <div style="font-size: 14px; line-height: 1.8;">
+        Try it out: <mark style="background-color: rgba(255, 255, 0, 0.4); border-bottom: 1px dashed orange; cursor: help; border-radius: 2px; padding: 0 2px;" id="test-symbol">CD4</mark> and <mark style="background-color: rgba(255, 255, 0, 0.4); border-bottom: 1px dashed orange; cursor: help; border-radius: 2px; padding: 0 2px;" id="test-symbol-2">NFKB1</mark> are common gene symbols.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span>💡</span> Help & Tips</div>
+      <div style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+        <ul style="padding-left: 20px; margin: 0;">
+          <li><strong>Keyboard Shortcut:</strong> Toggle all highlights using <kbd style="background: var(--border); padding: 2px 4px; border-radius: 4px; font-family: monospace;">Cmd/Ctrl + Shift + H</kbd>.</li>
+          <li><strong>Greek Symbols:</strong> Supports α, β, γ mapping (e.g., α-tubulin matches TUBA1A).</li>
+          <li><strong>Refresh:</strong> If symbols aren't appearing, use the <strong>Refresh Database</strong> button to re-sync.</li>
+          <li><strong>Toolbar:</strong> Click the extension icon in your browser toolbar for quick status and toggle.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-bottom: 20px;">
+      <div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">GeneSymbol Highlighter v1.1.0</div>
+      <div style="margin-top: 8px;">
+        <button id="export-settings" style="border:none; background:none; color: var(--primary); font-size: 11px; cursor:pointer; text-decoration: underline; margin: 0 5px;">Export Settings</button>
+        <button id="import-settings" style="border:none; background:none; color: var(--primary); font-size: 11px; cursor:pointer; text-decoration: underline; margin: 0 5px;">Import Settings</button>
+        <button id="reset-defaults" style="border:none; background:none; color: #9ca3af; font-size: 11px; cursor:pointer; text-decoration: underline; margin: 0 5px;">Reset to Defaults</button>
+      </div>
+      <input type="file" id="import-file" style="display: none;" accept=".json">
+      <div style="margin-top: 12px;">
+        <a href="privacy.html" target="_blank" style="font-size: 12px; color: var(--primary); text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+        <a href="#" style="font-size: 12px; color: var(--primary); text-decoration: none; margin: 0 10px;">Support & Feedback</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
