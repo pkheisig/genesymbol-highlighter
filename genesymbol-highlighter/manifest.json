@@ -3,6 +3,7 @@
   "name": "GeneSymbol Highlighter",
   "version": "1.1.0",
   "description": "Professional tool for gene symbol identification and reference.",
+  "homepage_url": "https://github.com/pkheisig/genesymbol-highlighter",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
